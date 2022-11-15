@@ -1,13 +1,13 @@
 <template>
 	<vue-flip
 		:active-hover = "true"
-		width					= "500px"
-		height				= "300px"
+		:width				= "`${isWidth}px`"
+		:height				= "`${isHeight}px`"
 	>
 		<template v-slot:front>
       <div
         class  = "front-side"
-        :style = "{ background: gradient }"
+        :style = "{ background: gradient, width: `${isWidth}px`, height: `${isHeight}px` }"
       >
         <div class = "ellipse" :style = "{ background: gradient }"></div>
         <div class = "ellipse ellipse--below" :style = "{ background: gradient }"></div>
@@ -15,7 +15,7 @@
         <div class = "top">
           <div class = "balance">
             <p class = "balance-name">Current Balance</p>
-            <p class = "balance-value">$5,750,20</p>
+            <p class = "balance-value">$22,660,00</p>
           </div>
           <div class = "mastercard">
             <img src = "@/assets/img/master-card.png" alt = "mastercard">
@@ -33,13 +33,13 @@
 		<template v-slot:back >
       <div
         class  = "back-side"
-        :style = "{ background: gradient }"
+        :style = "{ background: gradient, width: `${isWidth}px`, height: `${isHeight}px` }"
       >
         <div class = "back-side__black-line"></div>
         <div class = "back-side__content">
           <div class = "back-side__container-left">
             <div class = "cvv">123</div>
-            <p class = "lil-text">AUTHORIZED SIGNATURE</p>
+            <p class = "lil-text lil-text--mb">AUTHORIZED SIGNATURE</p>
             <div class = "bank">
               <p>BANK</p>
               <div></div>
@@ -68,6 +68,11 @@ import VueFlip from 'vue-flip';
 export default {
 	name: 'credit-card',
 
+  data: () => ({
+    isWidth: 500,
+    isHeight: 300,
+  }),
+
 	components: { 'vue-flip': VueFlip },
 
   props: {
@@ -75,6 +80,11 @@ export default {
       type: Object,
       required: true
     }
+  },
+
+  created () {
+    if (window.innerWidth <= 530) this.changeSizeCard();
+    window.addEventListener('resize', this.changeSizeCard)
   },
 
   computed: {
@@ -86,6 +96,18 @@ export default {
       }
       return 'linear-gradient(177.23deg, rgba(154, 29, 250, 0.6), rgba(58, 73, 249, 0.6) 109.75%)'
     },
+  },
+
+  methods: {
+    changeSizeCard () {
+      if (window.innerWidth <= 530) {
+        this.isWidth = 350;
+        this.isHeight = 250;
+      } else {
+        this.isWidth = 500;
+        this.isHeight = 300;
+      }
+    }
   }
 }
 </script>
@@ -100,8 +122,6 @@ $color-text: #FFFFFF;
 .front-side,
 .back-side {
 	border-radius: 30px;
-	width: 500px;
-	height: 300px;
   overflow: hidden;
 	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
@@ -112,6 +132,9 @@ $color-text: #FFFFFF;
   padding: 0 30px 30px 30px;
   display: flex; flex-direction: column; justify-content: space-between;
   color: $color-text;
+  @media screen and (max-width: 530px) {
+    padding: 0 15px 15px;
+  }
   .top {
     display: flex; justify-content: space-between;
 
@@ -123,6 +146,14 @@ $color-text: #FFFFFF;
         font-size: 28px;
         opacity: 0.6;
         margin-bottom: 10px;
+      }
+      @media screen and (max-width: 530px) {
+        padding-top: 20px;
+        font-size: 36px;
+        &-name {
+          font-size: 24px;
+          margin-bottom: 0;
+        }
       }
     }
 
@@ -140,6 +171,9 @@ $color-text: #FFFFFF;
     display: flex; justify-content: space-between;
     font-size: 24px;
     letter-spacing: 0.1rem;
+    @media screen and (max-width: 530px) {
+      font-size: 20px;
+    }
   }
 
   .ellipse {
@@ -170,6 +204,9 @@ $color-text: #FFFFFF;
     height: 60px;
     background: rgba(0, 0, 0, 0.5);
     margin-bottom: 20px;
+    @media screen and (max-width: 530px) {
+      height: 40px;
+    }
   }
 
   &__content {
@@ -190,11 +227,19 @@ $color-text: #FFFFFF;
       color: black;
       background-color: rgba(255, 255, 255, 0.5);
       margin-bottom: 5px;
+      @media screen and (max-width: 530px) {
+        font-size: 20px;
+      }
     }
 
     .lil-text {
       font-size: 12px;
-      margin-bottom: 60px;
+      &--mb {
+        margin-bottom: 60px;
+        @media screen and (max-width: 530px) {
+          margin-bottom: 30px;
+        }
+      }
     }
 
     .bank {
@@ -209,6 +254,11 @@ $color-text: #FFFFFF;
         width: 20px; height: 20px;
         background-color: #FFFFFF;
         border-radius: 50%;
+      }
+      @media screen and (max-width: 530px) {
+        p {
+          font-size: 26px;
+        }
       }
     }
   }

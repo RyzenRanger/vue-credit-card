@@ -1,10 +1,8 @@
 <template>
   <div id = "app">
-    <video autoplay muted loop class = "video-background">
-      <source src="@/assets/background-anime.mp4" type="video/mp4">
-    </video>
-
-    <credit-card :random-colors = 'colors' />
+    <transition name = "slide-fade">
+      <credit-card v-if = 'isOpacity' :random-colors = 'colors' />
+    </transition>
     <button-random-gradient @new-gradient = "saveGradient" />
   </div>
 </template>
@@ -19,6 +17,7 @@ export default {
   components: { CreditCard, ButtonRandomGradient },
 
   data: () => ({
+    isOpacity: true,
     colors: {},
   }),
 
@@ -55,12 +54,19 @@ export default {
   align-items: center;
   width: 100vw;
   height: 100vh;
+  background-image: url('@/assets/tired.gif');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 100%;
 }
 
-.video-background {
-  position: fixed;
-  z-index: -999;
-  top: 0;
-  left: 0;
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to{
+  opacity: 0;
 }
 </style>
